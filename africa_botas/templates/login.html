@@ -1,0 +1,48 @@
+{% extends 'plantilla-base.html' %}
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css')}}">
+{% endblock head %}
+{% block contenido %}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card d-flex justify-content-center py-3 login-card">
+    <img class="rounded mx-auto d-block" width="50%" height="auto"
+      src="{{ url_for('static', filename='branding/1.svg')}}" alt="Logo de África Botas" />
+    <div class="card-body">
+      <h5 class="card-title text-center">Iniciar sesión</h5>
+      <form action="" method="post">
+        <div class="mb-3">
+          {% if form.usuario.errors %}
+          {{ form.usuario(class="form-control is-invalid", placeholder=form.usuario.label.text) }}
+          <div class="invalid-feedback">
+            {% for error in form.usuario.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %}
+          {{ form.usuario(class="form-control", placeholder=form.usuario.label.text) }}
+          {% endif %}
+        </div>
+        <div class="mb-3">
+          {% if form.password.errors %}
+          {{ form.password(class="form-control is-invalid", placeholder=form.password.label.text) }}
+          <div class="invalid-feedback">
+            {% for error in form.password.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %}
+          {{ form.password(class="form-control", placeholder=form.password.label.text) }}
+          {% endif %}
+        </div>
+        <div class="form-check mb-3">
+          {{ form.recuerdame(class="form-check-input") }}
+          {{ form.recuerdame.label(class="form-check-label") }}
+        </div>
+        <div class="mb-3 d-grid gap-2">
+          {{ form.submit(class="btn btn-dark d-block bg-primary-dark") }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock contenido %}
