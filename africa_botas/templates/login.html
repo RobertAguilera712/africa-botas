@@ -1,48 +1,71 @@
 {% extends 'plantilla-base.html' %}
 {% block head %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css')}}">
 {% endblock head %}
 {% block contenido %}
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-  <div class="card d-flex justify-content-center py-3 login-card">
-    <img class="rounded mx-auto d-block" width="50%" height="auto"
-      src="{{ url_for('static', filename='branding/1.svg')}}" alt="Logo de África Botas" />
-    <div class="card-body">
-      <h5 class="card-title text-center">Iniciar sesión</h5>
-      <form action="" method="post">
-        <div class="mb-3">
-          {% if form.usuario.errors %}
-          {{ form.usuario(class="form-control is-invalid", placeholder=form.usuario.label.text) }}
-          <div class="invalid-feedback">
-            {% for error in form.usuario.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-          </div>
-          {% else %}
-          {{ form.usuario(class="form-control", placeholder=form.usuario.label.text) }}
-          {% endif %}
-        </div>
-        <div class="mb-3">
-          {% if form.password.errors %}
-          {{ form.password(class="form-control is-invalid", placeholder=form.password.label.text) }}
-          <div class="invalid-feedback">
-            {% for error in form.password.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-          </div>
-          {% else %}
-          {{ form.password(class="form-control", placeholder=form.password.label.text) }}
-          {% endif %}
-        </div>
-        <div class="form-check mb-3">
-          {{ form.recuerdame(class="form-check-input") }}
-          {{ form.recuerdame.label(class="form-check-label") }}
-        </div>
-        <div class="mb-3 d-grid gap-2">
-          {{ form.submit(class="btn btn-dark d-block bg-primary-dark") }}
-        </div>
-      </form>
+<div class="container justify-content-center align-items-center min-vh-100 overflow-scroll">
+  <div class="row">
+    <div class="col-12 my-4">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show">
+        {{ message }}
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
     </div>
   </div>
+  <div class="row justify-content-center align-items-center">
+    <div class="col-12 d-flex justify-content-center align-items-center">
+      {% block content%}{% endblock %}
+      <div class="card d-flex justify-content-center py-3 login-card">
+        <img class="rounded mx-auto d-block" width="50%" height="auto"
+          src="{{ url_for('static', filename='branding/1.svg')}}" alt="Logo de África Botas" />
+        <div class="card-body">
+          <h5 class="card-title text-center">Iniciar sesión</h5>
+          <form action="/login" method="post">
+            {{ form.hidden_tag() }}
+            <div class="my-3 form-floating">
+              {% if form.usuario.errors %}
+              {{ form.usuario(class="form-control is-invalid", placeholder=form.usuario.label.text) }}
+              <div class="invalid-feedback">
+                {% for error in form.usuario.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+              {% else %}
+              {{ form.usuario(class="form-control", placeholder=form.usuario.label.text) }}
+              {% endif %}
+              {{ form.usuario.label }}
+            </div>
+            <div class="my-3 form-floating">
+              {% if form.password.errors %}
+              {{ form.password(class="form-control is-invalid", placeholder=form.password.label.text) }}
+              <div class="invalid-feedback">
+                {% for error in form.password.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+              {% else %}
+              {{ form.password(class="form-control", placeholder=form.password.label.text) }}
+              {% endif %}
+              {{ form.password.label }}
+            </div>
+            <div class="form-check mb-3">
+              {{ form.recuerdame(class="form-check-input") }}
+              {{ form.recuerdame.label(class="form-check-label") }}
+            </div>
+            <div class="mb-3 d-grid gap-2">
+              {{ form.submit(class="btn btn-primary-dark d-block") }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endblock contenido %}
+
+  </div>
 </div>
-{% endblock contenido %}

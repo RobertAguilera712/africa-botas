@@ -1,9 +1,6 @@
 .login-card{
     background-color: #E4D6C0;
-}
-
-.bg-primary-dark{
-    background-color: #968263 !important;
-    border-color: #968263 !important;
-    color: #fff;
+    border-radius: 5%;
+    box-shadow: 0 16px 32px 0 rgba(0,0,0,0.3);
+    width: 20rem;
 }

@@ -1,0 +1,63 @@
+{% extends 'plantilla-base.html' %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/dashboard.css')}}">
+{% endblock head %}
+
+{% block contenido %}
+<header class="header" id="header">
+  <div class="header_toggle">
+    <i class="mdi mdi-menu" id="header-toggle"></i>
+  </div>
+  <div class="dropdown">
+    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+      aria-expanded="false">
+      <img src="" id="fotoEmpleado" height="35" alt="user" />
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+      <li>
+        <a class="dropdown-item" role="button" onclick="verDatos()">Ver mis datos</a>
+      </li>
+      <li>
+        <a class="dropdown-item" role="button" onclick="cerrarSesion()">Salir</a>
+      </li>
+    </ul>
+  </div>
+</header>
+<div class="l-navbar" id="nav-bar">
+  <nav class="nav">
+    <div class="nav_list">
+      <a role="button" class="nav_link" onclick="loadDashboard()">
+        <i class="fas fa-spa nav_logo-icon"></i>
+        <span class="nav_logo-name">Africa botas</span>
+      </a>
+      <a role="button" class="nav_link" onclick="loadEmployeesTable()">
+        <i class="mdi mdi-briefcase-account nav_icon"></i>
+        <span class="nav_name">Empleados</span>
+      </a>
+      <a role="button" class="nav_link" onclick="loadProductsTable()">
+        <i class="mdi mdi-shoe-formal nav_icon"></i>
+        <span class="nav_name">Productos</span>
+      </a>
+    </div>
+  </nav>
+</div>
+<div class="w-100 bg-light pt-2 overflow-auto">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  <div class="alert alert-{{ category }} alert-dismissible fade show">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+
+  {% block modulo %}
+  {% endblock modulo %}
+
+  {% endblock contenido %}
+
+  {% block scripts %}
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+  {% endblock scripts %}
