@@ -1,4 +1,4 @@
-{% extends 'dashboard.html' %}
+{% extends 'plantillaDashboard.html' %}
 {% block modulo %}
 <div class="container-fluid">
     <h1 class="text-center my-3">{{ operacion }} empleado</h1>
@@ -167,6 +167,21 @@
               {{ form.password(class="form-control", placeholder=form.password.label.text) }}
               {% endif %}
               {{ form.password.label }}
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+            <div class="form-floating">
+              {% if form.confirmar_password.errors %}
+              {{ form.confirmar_password(class="form-control is-invalid", placeholder=form.confirmar_password.label.text) }}
+              <div class="invalid-feedback">
+                {% for error in form.confirmar_password.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+              {% else %}
+              {{ form.confirmar_password(class="form-control", placeholder=form.confirmar_password.label.text) }}
+              {% endif %}
+              {{ form.confirmar_password.label }}
             </div>
         </div>
         <div class="col-12 d-flex justify-content-center">

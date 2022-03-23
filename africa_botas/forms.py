@@ -1,7 +1,8 @@
+from email import message
 from flask_wtf import FlaskForm
 from africa_botas import mongo
 from wtforms import StringField, SubmitField, PasswordField, BooleanField, SelectField, DateField
-from wtforms.validators import DataRequired, Length, ValidationError
+from wtforms.validators import DataRequired, Length, ValidationError, EqualTo
 
 class LoginForm(FlaskForm):
     usuario = StringField(label='Usuario', validators=[DataRequired('Por favor introduzca el usuario')])
@@ -21,9 +22,10 @@ class RegistrarEmpleadoForm(FlaskForm):
     fecha_contratacion = DateField(label='Fecha de contratación', validators=[DataRequired('Por favor introduzca la fecha de contratación')])
     usuario = StringField(label='Usuario', validators=[DataRequired('Por favor introduzca el usuario')])
     password = PasswordField(label='Contraseña', validators=[DataRequired('Por favor introduzca la contraseña')])
+    confirmar_password = PasswordField(label='Confirmar contraseña', validators=[DataRequired('Por favor confirme la contraseña'), EqualTo('password', message='Las contraseñas no coinciden')])
     submit = SubmitField(label='Guardar')
 
-    def validar_usuario(self, usuario):
-        user = mongo.db.empleados.find_one({'usuario.usuario': usuario.data})
+    def validate_usuario(self, usuario):
+        user = mongo.db.empleados.find_one({'usuario.usuario': usuario.data});
         if user:
             raise ValidationError('El nombre de usuario ya existe. Ingrese otro diferente')

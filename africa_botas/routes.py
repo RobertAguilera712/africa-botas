@@ -22,7 +22,7 @@ def home():
     #         flash('The pet has been saved', 'success')
     #         return redirect(url_for('home'))
     # return render_template('index.html', form=form, pets=pets, action=action)
-    return str(session.get('empleado'))
+    return render_template('dashboard.html', titulo='dashboard', empleado = session.get('empleado'))
 
 @app.route('/modify/<string:id>', methods=['GET', 'POST'])
 def modify(id):
@@ -75,6 +75,7 @@ def login():
 
 
 @app.route('/empleado/registrar', methods=['POST', 'GET'])
+@login_required
 def registrar_empleado():
     form = RegistrarEmpleadoForm()
     if request.method == 'POST':
@@ -104,3 +105,9 @@ def registrar_empleado():
             mongo.db.empleados.insert_one(empleado)
             flash('Empleado registrado exitosamente', 'success')
     return render_template('empleadosForm.html', titulo='Registrar empleado', form=form, operacion='Registrar')
+
+@app.route('/empleados')
+@login_required
+def get_empleados():
+    empleados = mongo.db.empleados.find()
+    return render_template('empleadosTable.html', titulo='Empleados', empleados=empleados)
