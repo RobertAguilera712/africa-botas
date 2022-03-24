@@ -1,9 +1,11 @@
-from flask import render_template, session, url_for, flash, redirect, request, jsonify
+from crypt import methods
+from flask import render_template, session, url_for, flash, redirect, request, Response
 from datetime import datetime
 from africa_botas import app, mongo, bcrypt
 from africa_botas.forms import LoginForm, RegistrarEmpleadoForm
 from africa_botas.helpers import login_required
-from bson.objectid import ObjectId
+from bson.objectid import ObjectId 
+from bson import json_util
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -55,22 +57,11 @@ def delete():
     pass
 
 
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/login', methods=['POST'])
 def login():
-    form = LoginForm()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            empleado = mongo.db.empleados.find_one({'usuario.usuario': form.usuario.data});
-            if empleado:
-                empleado['_id'] = str(empleado['_id'])
-                # usuario = empleado.get('usuario')
-                if bcrypt.check_password_hash(empleado['usuario']['password'] , form.password.data):
-                    session['empleado'] = empleado
-                    return redirect(url_for('home'))
-                else:
-                    flash('La contraseña es errónea', 'danger')
-            else:
-                flash(f'El usuario {form.usuario.data} no existe', 'danger')
+    usuario = request.json['usuario']
+    password = request.json['password']
+    
     return render_template('login.html', titulo='Iniciar sesión', form=form)
 
 
@@ -106,8 +97,9 @@ def registrar_empleado():
             flash('Empleado registrado exitosamente', 'success')
     return render_template('empleadosForm.html', titulo='Registrar empleado', form=form, operacion='Registrar')
 
-@app.route('/empleados')
-@login_required
+@app.route('/empleados/get')
+# @login_required
 def get_empleados():
     empleados = mongo.db.empleados.find()
-    return render_template('empleadosTable.html', titulo='Empleados', empleados=empleados)
+    response = json_util.dumps(empleados)
+    return Response(response, mimetype='application/json')
