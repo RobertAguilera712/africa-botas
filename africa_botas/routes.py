@@ -9,19 +9,6 @@ from bson.objectid import ObjectId
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    # form = PetForm()
-    # pets = mongo.db.pets.find()
-    # action = url_for('home')
-    # if request.method == 'POST':
-    #     if form.validate_on_submit():
-    #         name = request.form.get('name')
-    #         species = request.form.get('species')
-    #         breed = request.form.get('breed')
-    #         pet = {"name": name, "species": species, "breed": breed}
-    #         mongo.db.pets.insert_one(pet)
-    #         flash('The pet has been saved', 'success')
-    #         return redirect(url_for('home'))
-    # return render_template('index.html', form=form, pets=pets, action=action)
     return render_template('dashboard.html', titulo='dashboard', empleado = session.get('empleado'))
 
 @app.route('/modify/<string:id>', methods=['GET', 'POST'])
@@ -54,6 +41,10 @@ def delete():
     # return redirect(url_for('home'))
     pass
 
+@app.route('/search', methods=['GET'])
+def search():
+    
+    pass
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():

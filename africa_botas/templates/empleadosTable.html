@@ -3,25 +3,28 @@
 <h1 class="text-center my-3">Empleados</h1>
 
 <div class="container my-4">
-    <form class="row g-3 justify-content-center">
-        <div class="col-3">
-            <select id="sltSearchBy" class="form-select" placeholder="Ordenar por" required onchange="searchEmployee()">
-                <option value="nombre">Buscar por: Nombre</option>
-                <option value="apellidoPaterno">Buscar por: Apellido paterno</option>
-                <option value="apellidoMaterno">Buscar por: Apellido materno</option>
-                <option value="genero">Buscar por: Género</option>
-                <option value="domicilio">Buscar por: domicilio</option>
-                <option value="telefono">Buscar por: telefono</option>
-                <option value="rfc">Buscar por: RFC</option>
-                <option value="numeroEmpleado">Buscar por: Número de empleado</option>
-                <option value="puesto">Buscar por: puesto</option>
-                <option value="nombreUsuario">Buscar por: Nombre de usuario</option>
-            </select>
-        </div>
-        <div class="col-3">
-            <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" id="searchBar"
-                oninput="searchEmployee()" />
-        </div>
+    <div class="row g-3 justify-content-center">
+        <form method="get">
+            <div class="col-3">
+                <select id="sltSearchBy" class="form-select" placeholder="Ordenar por" required onchange="searchEmployee()">
+                    <option value="nombre">Buscar por: Nombre</option>
+                    <option value="apellidoPaterno">Buscar por: Apellido paterno</option>
+                    <option value="apellidoMaterno">Buscar por: Apellido materno</option>
+                    <option value="genero">Buscar por: Género</option>
+                    <option value="domicilio">Buscar por: domicilio</option>
+                    <option value="telefono">Buscar por: telefono</option>
+                    <option value="rfc">Buscar por: RFC</option>
+                    <option value="numeroEmpleado">Buscar por: Número de empleado</option>
+                    <option value="puesto">Buscar por: puesto</option>
+                    <option value="nombreUsuario">Buscar por: Nombre de usuario</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" id="searchBar"
+                    oninput="searchEmployee()" />
+                <button class="mx-2 form-control">Buscar</button>
+            </div>
+        </form>
         <div class="col-3">
             <select id="sltStatus" class="form-select" placeholder="Ordenar por" onchange="refreshEmployeesTable()">
                 <option value="1" selected>Mostrar registros activos</option>
@@ -33,7 +36,7 @@
                 Agregar
             </a>
         </div>
-    </form>
+    </div>
 </div>
 
 <div class="container-fluid">
