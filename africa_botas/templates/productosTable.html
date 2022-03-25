@@ -1,0 +1,61 @@
+{% extends 'plantillaDashboard.html' %}
+{% block modulo %}
+<h1 class="text-center my-3">Productos</h1>
+
+<div class="container my-4">
+    <form class="row g-3 justify-content-center">
+        <div class="col-3">
+            <select id="sltSearchBy" class="form-select" placeholder="Ordenar por" required onchange="searchEmployee()">
+                <option value="nombre">Buscar por: Nombre</option>
+                <option value="apellidoPaterno">Buscar por: Marca</option>
+                <option value="apellidoMaterno">Buscar por: Modelo</option>
+                <option value="genero">Buscar por: Descripción</option>
+            </select>
+        </div>
+        <div class="col-3">
+            <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" id="searchBar"
+                oninput="searchEmployee()" />
+        </div>
+        <div class="col-3">
+            <select id="sltStatus" class="form-select" placeholder="Ordenar por" onchange="refreshEmployeesTable()">
+                <option value="1" selected>Mostrar registros activos</option>
+                <option value="0">Mostrar registros inactivos</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <a class="btn btn-success" href="/producto/registrar">
+                Agregar
+            </a>
+        </div>
+    </form>
+</div>
+
+<div class="container-fluid">
+    <div class="table-responsive my-4">
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>{{ producto['nombre']}}</td>
+                    <td>{{ producto['precio']}}</td>
+                    <td>{{ producto['marca']}}</td>
+                    <td>{{ producto['modelo']}}</td>
+                    <td>{{ producto['descripcion']}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock modulo %}

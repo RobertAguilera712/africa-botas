@@ -1,7 +1,7 @@
 from flask import render_template, session, url_for, flash, redirect, request, jsonify
 from datetime import datetime
 from africa_botas import app, mongo, bcrypt
-from africa_botas.forms import LoginForm, RegistrarEmpleadoForm
+from africa_botas.forms import LoginForm, RegistrarEmpleadoForm, RegistrarProductosForm
 from africa_botas.helpers import login_required
 from bson.objectid import ObjectId
 
@@ -106,8 +106,32 @@ def registrar_empleado():
             flash('Empleado registrado exitosamente', 'success')
     return render_template('empleadosForm.html', titulo='Registrar empleado', form=form, operacion='Registrar')
 
-@app.route('/empleados')
+@app.route('/empleado')
 @login_required
 def get_empleados():
     empleados = mongo.db.empleados.find()
     return render_template('empleadosTable.html', titulo='Empleados', empleados=empleados)
+
+
+@app.route('/producto/registrar', methods=['POST', 'GET'])
+@login_required
+def registrar_producto():
+    form = RegistrarProductosForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            producto = {
+                'nombre': form.nombre.data,
+                'precio': float(form.precio.data),
+                'marca': form.marca.data,
+                'modelo': form.modelo.data,
+                'descripcion': form.descripcion.data
+            }
+            mongo.db.productos.insert_one(producto)
+            flash('Producto registrado exitosamente', 'success')
+    return render_template('productosForm.html', titulo='Registrar productos', form=form, operacion='Registrar')
+
+@app.route('/producto')
+@login_required
+def get_productos():
+    productos = mongo.db.productos.find()
+    return render_template('productosTable.html', titulo='Productos', productos=productos)

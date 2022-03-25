@@ -1,8 +1,8 @@
 from email import message
 from flask_wtf import FlaskForm
 from africa_botas import mongo
-from wtforms import StringField, SubmitField, PasswordField, BooleanField, SelectField, DateField
-from wtforms.validators import DataRequired, Length, ValidationError, EqualTo
+from wtforms import * 
+from wtforms.validators import DataRequired, Length, ValidationError, EqualTo, NumberRange
 
 class LoginForm(FlaskForm):
     usuario = StringField(label='Usuario', validators=[DataRequired('Por favor introduzca el usuario')])
@@ -29,3 +29,12 @@ class RegistrarEmpleadoForm(FlaskForm):
         user = mongo.db.empleados.find_one({'usuario.usuario': usuario.data});
         if user:
             raise ValidationError('El nombre de usuario ya existe. Ingrese otro diferente')
+
+class RegistrarProductosForm(FlaskForm):
+    nombre = StringField(label='Nombre', validators=[DataRequired('Por favor introduzca el nombre')])
+    precio = DecimalField(label='Precio', validators=[DataRequired('Por favor introduzca el precio'), NumberRange(min=1, message='Introduzca un precio valido')])
+    modelo = StringField(label='Modelo', validators=[DataRequired('Por favor introduzca el modelo')])
+    marca = StringField(label='Marca', validators=[DataRequired('Por favor introduzca el marca')])
+    descripcion = TextAreaField('Descripción', validators=[DataRequired('Por favor introduzca la descripción')])
+    imagen = FileField('Foto')
+    submit = SubmitField(label='Guardar')

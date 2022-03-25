@@ -6,7 +6,6 @@
     <form class="row g-3 justify-content-center">
         <div class="col-3">
             <select id="sltSearchBy" class="form-select" placeholder="Ordenar por" required onchange="searchEmployee()">
-                <option value="idEmpleado" selected>Buscar por: ID</option>
                 <option value="nombre">Buscar por: Nombre</option>
                 <option value="apellidoPaterno">Buscar por: Apellido paterno</option>
                 <option value="apellidoMaterno">Buscar por: Apellido materno</option>
@@ -26,13 +25,13 @@
         <div class="col-3">
             <select id="sltStatus" class="form-select" placeholder="Ordenar por" onchange="refreshEmployeesTable()">
                 <option value="1" selected>Mostrar registros activos</option>
-                <option value="0">Mostras registros inactivos</option>
+                <option value="0">Mostrar registros inactivos</option>
             </select>
         </div>
         <div class="col-auto">
-            <button class="btn btn-success" type="button" onclick="loadEmployeesForm()">
+            <a class="btn btn-success" href="/empleado/registrar">
                 Agregar
-            </button>
+            </a>
         </div>
     </form>
 </div>

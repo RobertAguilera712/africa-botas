@@ -21,172 +21,67 @@
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 my-3">
             <div class="form-floating">
-              {% if form.apellido_p.errors %}
-              {{ form.apellido_p(class="form-control is-invalid", placeholder=form.apellido_p.label.text) }}
+              {% if form.precio.errors %}
+              {{ form.precio(class="form-control is-invalid", placeholder=form.precio.label.text) }}
               <div class="invalid-feedback">
-                {% for error in form.apellido_p.errors %}
+                {% for error in form.precio.errors %}
                 <span>{{ error }}</span>
                 {% endfor %}
               </div>
               {% else %}
-              {{ form.apellido_p(class="form-control", placeholder=form.apellido_p.label.text) }}
+              {{ form.precio(class="form-control", placeholder=form.precio.label.text) }}
               {% endif %}
-              {{ form.apellido_p.label }}
+              {{ form.precio.label }}
             </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 my-3">
             <div class="form-floating">
-              {% if form.apellido_m.errors %}
-              {{ form.apellido_m(class="form-control is-invalid", placeholder=form.apellido_m.label.text) }}
+              {% if form.modelo.errors %}
+              {{ form.modelo(class="form-control is-invalid", placeholder=form.modelo.label.text) }}
               <div class="invalid-feedback">
-                {% for error in form.apellido_m.errors %}
+                {% for error in form.modelo.errors %}
                 <span>{{ error }}</span>
                 {% endfor %}
               </div>
               {% else %}
-              {{ form.apellido_m(class="form-control", placeholder=form.apellido_m.label.text) }}
+              {{ form.modelo(class="form-control", placeholder=form.modelo.label.text) }}
               {% endif %}
-              {{ form.apellido_m.label }}
+              {{ form.modelo.label }}
             </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 my-3">
             <div class="form-floating">
-              {% if form.direccion.errors %}
-              {{ form.direccion(class="form-control is-invalid", placeholder=form.direccion.label.text) }}
+              {% if form.marca.errors %}
+              {{ form.marca(class="form-control is-invalid", placeholder=form.marca.label.text) }}
               <div class="invalid-feedback">
-                {% for error in form.direccion.errors %}
+                {% for error in form.marca.errors %}
                 <span>{{ error }}</span>
                 {% endfor %}
               </div>
               {% else %}
-              {{ form.direccion(class="form-control", placeholder=form.direccion.label.text) }}
+              {{ form.marca(class="form-control", placeholder=form.marca.label.text) }}
               {% endif %}
-              {{ form.direccion.label }}
+              {{ form.marca.label }}
             </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 my-3">
             <div class="form-floating">
-              {% if form.telefono.errors %}
-              {{ form.telefono(class="form-control is-invalid", placeholder=form.telefono.label.text) }}
+              {% if form.descripcion.errors %}
+              {{ form.descripcion(class="form-control is-invalid", placeholder=form.descripcion.label.text) }}
               <div class="invalid-feedback">
-                {% for error in form.telefono.errors %}
+                {% for error in form.descripcion.errors %}
                 <span>{{ error }}</span>
                 {% endfor %}
               </div>
               {% else %}
-              {{ form.telefono(class="form-control", placeholder=form.telefono.label.text) }}
+              {{ form.descripcion(class="form-control", placeholder=form.descripcion.label.text) }}
               {% endif %}
-              {{ form.telefono.label }}
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
-            <div class="form-floating">
-              {% if form.genero.errors %}
-              {{ form.genero(class="form-control is-invalid", placeholder=form.genero.label.text) }}
-              <div class="invalid-feedback">
-                {% for error in form.genero.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-              </div>
-              {% else %}
-              {{ form.genero(class="form-control", placeholder=form.genero.label.text) }}
-              {% endif %}
-              {{ form.genero.label }}
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
-            <div class="form-floating">
-              {% if form.fecha_nacimiento.errors %}
-              {{ form.fecha_nacimiento(class="form-control is-invalid", placeholder=form.fecha_nacimiento.label.text) }}
-              <div class="invalid-feedback">
-                {% for error in form.fecha_nacimiento.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-              </div>
-              {% else %}
-              {{ form.fecha_nacimiento(class="form-control", placeholder=form.fecha_nacimiento.label.text) }}
-              {% endif %}
-              {{ form.fecha_nacimiento.label }}
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
-            <div class="form-floating">
-              {% if form.puesto.errors %}
-              {{ form.puesto(class="form-control is-invalid", placeholder=form.puesto.label.text) }}
-              <div class="invalid-feedback">
-                {% for error in form.puesto.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-              </div>
-              {% else %}
-              {{ form.puesto(class="form-control", placeholder=form.puesto.label.text) }}
-              {% endif %}
-              {{ form.puesto.label }}
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
-            <div class="form-floating">
-              {% if form.fecha_contratacion.errors %}
-              {{ form.fecha_contratacion(class="form-control is-invalid", placeholder=form.fecha_contratacion.label.text) }}
-              <div class="invalid-feedback">
-                {% for error in form.fecha_contratacion.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-              </div>
-              {% else %}
-              {{ form.fecha_contratacion(class="form-control", placeholder=form.fecha_contratacion.label.text) }}
-              {% endif %}
-              {{ form.fecha_contratacion.label }}
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
-            <div class="form-floating">
-              {% if form.usuario.errors %}
-              {{ form.usuario(class="form-control is-invalid", placeholder=form.usuario.label.text) }}
-              <div class="invalid-feedback">
-                {% for error in form.usuario.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-              </div>
-              {% else %}
-              {{ form.usuario(class="form-control", placeholder=form.usuario.label.text) }}
-              {% endif %}
-              {{ form.usuario.label }}
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
-            <div class="form-floating">
-              {% if form.password.errors %}
-              {{ form.password(class="form-control is-invalid", placeholder=form.password.label.text) }}
-              <div class="invalid-feedback">
-                {% for error in form.password.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-              </div>
-              {% else %}
-              {{ form.password(class="form-control", placeholder=form.password.label.text) }}
-              {% endif %}
-              {{ form.password.label }}
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
-            <div class="form-floating">
-              {% if form.confirmar_password.errors %}
-              {{ form.confirmar_password(class="form-control is-invalid", placeholder=form.confirmar_password.label.text) }}
-              <div class="invalid-feedback">
-                {% for error in form.confirmar_password.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-              </div>
-              {% else %}
-              {{ form.confirmar_password(class="form-control", placeholder=form.confirmar_password.label.text) }}
-              {% endif %}
-              {{ form.confirmar_password.label }}
+              {{ form.descripcion.label }}
             </div>
         </div>
         <div class="col-12 d-flex justify-content-center">
             {{ form.submit(class="btn btn-info m-2") }}
-            <button class="btn btn-danger m-2" onclick="loadEmployeesTable()" type="button">Regresar</button>
+            <a class="btn btn-danger m-2" href="/producto">Regresar<a/>
         </div>
     </form>
 </div>
