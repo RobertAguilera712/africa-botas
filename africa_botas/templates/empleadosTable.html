@@ -29,7 +29,7 @@
             </select>
         </div>
         <div class="col-auto">
-            <a class="btn btn-success" href="/empleado/registrar">
+            <a class="btn btn-success" href="{{ url_for('registrar_empleado') }}">
                 Agregar
             </a>
         </div>
@@ -60,6 +60,9 @@
                     <td>{{ empleado['persona']['telefono'] }}</td>
                     <td>{{ empleado.puesto }}</td>
                     <td>{{ empleado.fecha_contratacion.date() }}</td>
+                    <td>
+                        <a href="{{ url_for('modififcar_empleado', id=empleado._id) }}" class="btn btn-warning btn-sm" role="button">Detalle</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

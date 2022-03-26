@@ -106,6 +106,26 @@ def registrar_empleado():
             flash('Empleado registrado exitosamente', 'success')
     return render_template('empleadosForm.html', titulo='Registrar empleado', form=form, operacion='Registrar')
 
+
+@app.route('/empleado/detalle/<string:id>')
+def modififcar_empleado(id):
+    form = RegistrarEmpleadoForm()
+    empleado = mongo.db.empleados.find_one({"_id": ObjectId(id)})
+    if empleado:
+        print(empleado)
+        form.nombre.data = empleado['nombre']
+        form.apellido_p.data = empleado['apellido_p']
+        form.apellido_m.data = empleado['apellido_m']
+        form.direccion.data = empleado['direccion']
+        form.telefono.data = empleado['telefono']
+        form.genero.data = empleado['genero']
+        form.fecha_nacimiento.data = empleado['fecha_nacimiento']
+        form.puesto.data = empleado['puesto']
+        form.fecha_contratacion.data = empleado['fecha_contratacion']
+        form.usuario.data = empleado['usuario']
+        form.password.data = empleado['password']
+    return render_template('empleadosDetalle.html', titulo='Detalle empleado', form=form, operacion='Detalle')
+
 @app.route('/empleado')
 @login_required
 def get_empleados():
