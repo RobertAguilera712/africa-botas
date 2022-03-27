@@ -1,8 +1,9 @@
 {% extends 'plantillaDashboard.html' %}
 {% block modulo %}
 <div class="container-fluid">
-    <h1 class="text-center my-3">{{ operacion }} empleado</h1>
-    <form class="row" method="post" action="{{ action }}">
+    <h1 class="text-center my-3">Detalle empleado</h1>
+    <form class="row" method="post" action="">
+      {% block form %}
         {{ form.hidden_tag() }}
         <div class="col-lg-4 col-md-6 col-sm-12 my-3">
             <div class="form-floating">
@@ -139,56 +140,35 @@
               {{ form.fecha_contratacion.label }}
             </div>
         </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
-            <div class="form-floating">
-              {% if form.usuario.errors %}
-              {{ form.usuario(class="form-control is-invalid", placeholder=form.usuario.label.text) }}
-              <div class="invalid-feedback">
-                {% for error in form.usuario.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-              </div>
-              {% else %}
-              {{ form.usuario(class="form-control", placeholder=form.usuario.label.text) }}
-              {% endif %}
-              {{ form.usuario.label }}
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
-            <div class="form-floating">
-              {% if form.password.errors %}
-              {{ form.password(class="form-control is-invalid", placeholder=form.password.label.text) }}
-              <div class="invalid-feedback">
-                {% for error in form.password.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-              </div>
-              {% else %}
-              {{ form.password(class="form-control", placeholder=form.password.label.text) }}
-              {% endif %}
-              {{ form.password.label }}
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
-            <div class="form-floating">
-              {% if form.confirmar_password.errors %}
-              {{ form.confirmar_password(class="form-control is-invalid", placeholder=form.confirmar_password.label.text) }}
-              <div class="invalid-feedback">
-                {% for error in form.confirmar_password.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-              </div>
-              {% else %}
-              {{ form.confirmar_password(class="form-control", placeholder=form.confirmar_password.label.text) }}
-              {% endif %}
-              {{ form.confirmar_password.label }}
-            </div>
-        </div>
+      {% endblock form %}
         <div class="col-12 d-flex justify-content-center">
-            {{ form.submit(class="btn btn-info m-2") }}
-            <a class="btn btn-danger m-2" href="/empleado">Regresar<a/>
+          {% block botones %}
+            <button type="button" class="btn btn-warning m-2" id="btnModificar">Modificar</button>
+            {{ form.submit(class="btn btn-info m-2 d-none", id="btnGuardar") }}
+          {% endblock botones %}
+          <a class="btn btn-danger m-2" href="/empleado">Regresar<a/>
         </div>
     </form>
 </div>
 
 {% endblock modulo %}
+
+{% block scripts %}
+ {{ super() }}
+ <script>
+     const inputs = document.querySelectorAll('input:not([type="submit"]), select')
+     inputs.forEach(element => {
+        element.disabled = true
+     });
+     document.querySelectorAll('input[type="password"], input[name="usuario"]').forEach(element => {
+       element.parentElement.remove()
+     })
+     const btnModificar  = document.getElementById('btnModificar')
+     btnModificar.addEventListener('click', () => {
+      inputs.forEach(element => {
+          element.disabled = false
+      });
+      document.getElementById('btnGuardar').classList.remove('d-none')
+     });
+ </script>
+{% endblock scripts %}
