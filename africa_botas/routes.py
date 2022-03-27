@@ -147,16 +147,25 @@ def registrar_producto():
             flash('Producto registrado exitosamente', 'success')
     return render_template('productosForm.html', titulo='Registrar productos', form=form, operacion='Registrar')
 
+
 @app.route('/producto', methods=['POST', 'GET'])
 @login_required
 def get_productos():
     form = BuscarProductoForm()
     if request.method == 'POST':
         if form.busqueda.data:
-            productos = mongo.db.productos.find({form.filtro.data: {'$regex': form.busqueda.data, '$options': 'i'}})
+            if form.filtro.data == 'precio':
+                try:
+                    productos = mongo.db.productos.find({'precio': float(form.busqueda.data)})
+                except ValueError:
+                    flash('Introduzca un valor numérico', 'warning')
+                    productos = mongo.db.productos.find()
+            else:
+                productos = mongo.db.productos.find({form.filtro.data: {'$regex': form.busqueda.data, '$options': 'i'}})
             return render_template('productosTable.html', titulo='productos', productos=productos, form=form)
     productos = mongo.db.productos.find()
     return render_template('productosTable.html', titulo='Productos', productos=productos, form=form)
+
 
 @app.route('/producto/detalle/<string:id>', methods=['POST', 'GET'])
 @login_required
@@ -182,6 +191,7 @@ def modificar_producto(id):
         form.modelo.data = producto["modelo"]
         form.descripcion.data = producto["descripcion"]
     return render_template('productosForm.html', titulo='Detalle productos', form=form, operacion='Detalle')
+
 
 @app.route('/producto/borrar', methods=['POST'])
 @login_required
