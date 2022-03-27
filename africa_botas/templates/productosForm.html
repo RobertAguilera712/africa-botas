@@ -2,7 +2,7 @@
 {% block modulo %}
 <div class="container-fluid">
     <h1 class="text-center my-3">{{ operacion }} producto</h1>
-    <form class="row" method="post" action="/producto/registrar">
+    <form class="row" method="post" action="">
         {{ form.hidden_tag() }}
         <div class="col-lg-4 col-md-6 col-sm-12 my-3">
             <div class="form-floating">
@@ -80,10 +80,33 @@
             </div>
         </div>
         <div class="col-12 d-flex justify-content-center">
-            {{ form.submit(class="btn btn-info m-2") }}
-            <a class="btn btn-danger m-2" href="/producto">Regresar<a/>
+          {% if operacion == "Detalle" %}
+          <button type="button" class="btn btn-warning m-2" id="btnModificar">Modificar</button>
+          {{ form.submit(class="btn btn-info m-2 d-none", id="btnGuardar") }}
+          {% else %}
+          {{ form.submit(class="btn btn-info m-2 ") }}
+          {% endif %}
+            <a class="btn btn-danger m-2" href="/producto">Regresar</a>
         </div>
     </form>
 </div>
 
 {% endblock modulo %}
+{% block scripts %}
+ {{ super() }}
+ {% if operacion == "Detalle" %}
+ <script>
+     const inputs = document.querySelectorAll('input:not([type="submit"]), select, textarea')
+     inputs.forEach(element => {
+        element.disabled = true
+     });
+     const btnModificar  = document.getElementById('btnModificar')
+     btnModificar.addEventListener('click', () => {
+      inputs.forEach(element => {
+          element.disabled = false
+      });
+      document.getElementById('btnGuardar').classList.remove('d-none')
+     });
+ </script>
+ {% endif %}
+{% endblock scripts %}

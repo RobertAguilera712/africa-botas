@@ -3,26 +3,40 @@
 <h1 class="text-center my-3">Productos</h1>
 
 <div class="container my-4">
-    <form class="row g-3 justify-content-center">
+    <form class="row g-3 justify-content-center" action="" method="post">
         <div class="col-3">
-            <select id="sltSearchBy" class="form-select" placeholder="Ordenar por" required onchange="searchEmployee()">
-                <option value="nombre">Buscar por: Nombre</option>
-                <option value="apellidoPaterno">Buscar por: Marca</option>
-                <option value="apellidoMaterno">Buscar por: Modelo</option>
-                <option value="genero">Buscar por: Descripción</option>
-            </select>
+            <div class="form-floating">
+                {{ form.hidden_tag() }}
+                {% if form.filtro.errors %}
+                    {{ form.filtro(class="form-control is-invalid", placeholder=form.filtro.label.text) }}
+                    <div class="invalid-feedback">
+                    {% for error in form.filtro.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.filtro(class="form-control", placeholder=form.filtro.label.text) }}
+                {% endif %}
+                {{ form.filtro.label }}
+            </div>
         </div>
         <div class="col-3">
-            <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" id="searchBar"
-                oninput="searchEmployee()" />
-        </div>
-        <div class="col-3">
-            <select id="sltStatus" class="form-select" placeholder="Ordenar por" onchange="refreshEmployeesTable()">
-                <option value="1" selected>Mostrar registros activos</option>
-                <option value="0">Mostrar registros inactivos</option>
-            </select>
+            <div class="form-floating">
+                {% if form.busqueda.errors %}
+                    {{ form.busqueda(class="form-control is-invalid", placeholder=form.busqueda.label.text) }}
+                    <div class="invalid-feedback">
+                    {% for error in form.busqueda.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.busqueda(class="form-control", placeholder=form.busqueda.label.text) }}
+                {% endif %}
+                {{ form.busqueda.label }}
+            </div>
         </div>
         <div class="col-auto">
+            {{ form.submit(class="btn btn-info m-2") }}
             <a class="btn btn-success" href="/producto/registrar">
                 Agregar
             </a>
@@ -51,6 +65,13 @@
                     <td>{{ producto['marca']}}</td>
                     <td>{{ producto['modelo']}}</td>
                     <td>{{ producto['descripcion']}}</td>
+                    <td>
+                        <a href="{{ url_for('modificar_producto', id=producto._id) }}" class="btn btn-primary btn-sm" role="button m-2">Detalle</a>
+                        <form action="{{ url_for('borrar_producto') }}" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="{{ producto._id }}">
+                            <input type="submit" class="btn btn-danger btn-sm m-2" value="Eliminar">
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

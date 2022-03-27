@@ -56,3 +56,15 @@ class RegistrarProductosForm(FlaskForm):
     descripcion = TextAreaField('Descripción', validators=[DataRequired('Por favor introduzca la descripción')])
     imagen = FileField('Foto')
     submit = SubmitField(label='Guardar')
+
+class BuscarProductoForm(FlaskForm):
+    filtro = SelectField(label='Buscar por:', 
+                        choices=[
+                            ('nombre', 'Nombre'),
+                            ('precio', 'Precio'),
+                            ('marca', 'Marca'),
+                            ('modelo', 'Modelo'),
+                            ('descripcion', 'Descripción')                            
+                            ])
+    busqueda = StringField(label='Buscar')
+    submit = SubmitField(label='Buscar')
