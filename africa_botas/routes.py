@@ -200,3 +200,18 @@ def borrar_producto():
     mongo.db.productos.delete_one({"_id": ObjectId(id)})
     flash('Producto eliminado exitosamente', 'danger')
     return redirect(url_for('get_productos'))
+
+
+@app.route('/misdatos', methods=['POST', 'GET'])
+@login_required
+def modificar_mis_datos():
+    form = ModificarUsuario()
+    empleado = session.get('empleado')
+    id = str(empleado['_id'])
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            empleado['usuario']['usuario'] = form.usuario.data
+            mongo.db.empleados.update_one({'_id': ObjectId(id)}, {'$set': empleado})
+            flash('Usuario modificado exitosamente', 'success')
+            return redirect(url_for('modificar_mis_datos'))
+    return render_template('verDatos.html', titulo='Mis datos', empleado=empleado, form=form)

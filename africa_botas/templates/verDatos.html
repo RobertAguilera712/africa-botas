@@ -1,0 +1,55 @@
+{% extends 'plantillaDashboard.html' %}
+{% block modulo %}
+<div class="container-fluid">
+    <h1 class="text-center my-3">Mis datos</h1>
+    <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+            <h3>Nombre: <span>{{empleado['persona']['nombre']}}</span></h3>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+            <h3>Apellido paterno: <span>{{empleado['persona']['apellido_p']}}</span></h3>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+            <h3>Apellido materno: <span>{{empleado['persona']['apellido_m']}}</span></h3>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+            <h3>Dirección: <span>{{empleado['persona']['direccion']}}</span></h3>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+            <h3>Teléfono: <span>{{empleado['persona']['telefono']}}</span></h3>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+            <h3>Género: <span>{{empleado['persona']['genero']}}</span></h3>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+            <h3>Fecha de nacimiento: <span>{{empleado['fecha_nacimiento'].date()}}</span></h3>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+            <h3>Puesto: <span>{{empleado['puesto']}}</span></h3>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+            <h3>Fecha de contratación: <span>{{empleado['fecha_contratacion'].date()}}</span></h3>
+        </div>
+    </div>
+</div>
+{% endblock modulo %}
+
+{% block scripts %}
+ {{ super() }}
+ <script>
+     const inputs = document.querySelectorAll('input:not([type="submit"]), select')
+     inputs.forEach(element => {
+        element.disabled = true
+     });
+     document.querySelectorAll('input[type="password"], input[name="usuario"]').forEach(element => {
+       element.parentElement.remove()
+     })
+     const btnModificar  = document.getElementById('btnModificar')
+     btnModificar.addEventListener('click', () => {
+      inputs.forEach(element => {
+          element.disabled = false
+      });
+      document.getElementById('btnGuardar').classList.remove('d-none')
+     });
+ </script>
+{% endblock scripts %}

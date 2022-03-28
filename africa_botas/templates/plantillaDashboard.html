@@ -11,11 +11,11 @@
   <div class="dropdown">
     <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
       aria-expanded="false">
-      <img src="" id="fotoEmpleado" height="35" alt="user" />
+      <img src="{{ url_for('static', filename='img/usuario.svg') }}" id="fotoEmpleado" height="35" alt="user" />
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
       <li>
-        <a class="dropdown-item" role="button" onclick="verDatos()">Ver mis datos</a>
+        <a class="dropdown-item" role="button" href="{{ url_for('modificar_mis_datos') }}">Ver mis datos</a>
       </li>
       <li>
         <a class="dropdown-item" role="button" onclick="cerrarSesion()">Salir</a>

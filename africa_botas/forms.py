@@ -10,6 +10,17 @@ class LoginForm(FlaskForm):
     recuerdame = BooleanField(label='Recuerdame')
     submit = SubmitField(label='Iniciar Sesión')
 
+
+class ModificarUsuario(FlaskForm):
+    usuario = StringField(label='Usuario', validators=[DataRequired('Por favor introduzca el usuario')])
+    submit = SubmitField(label='Iniciar Sesión')
+
+    def validate_usuario(self, usuario):
+        user = mongo.db.empleados.find_one({'usuario.usuario': usuario.data});
+        if user:
+            raise ValidationError('El nombre de usuario ya existe. Ingrese otro diferente')
+
+
 class DetalleEmpleadoForm(FlaskForm):
     nombre = StringField(label='Nombre', validators=[DataRequired('Por favor introduzca el nombre')])
     apellido_p = StringField(label='Apellido paterno', validators=[DataRequired('Por favor introduzca el primer apellido')])
