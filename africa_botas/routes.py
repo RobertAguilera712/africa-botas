@@ -211,12 +211,28 @@ def modificar_mis_datos():
     id = str(empleado['_id'])
     if request.method == 'POST':
         if form.validate_on_submit():
+            empleado.pop('_id')
             empleado['usuario']['usuario'] = form.usuario.data
-            print(f'id: {id}')
-            print(f'usuario: {form.usuario.data}')
-            print(f'empleado: {empleado}')
             mongo.db.empleados.update_one({'_id': ObjectId(id)}, {'$set': empleado})
+            empleado['_id'] = id
             flash('Usuario modificado exitosamente', 'success')
             return redirect(url_for('modificar_mis_datos'))
     form.usuario.data = empleado['usuario']['usuario']
+    return render_template('verDatos.html', titulo='Mis datos', empleado=empleado, form=form)
+
+
+@app.route('/cambiar-password', methods=['POST', 'GET'])
+@login_required
+def modificar_password():
+    form = ModificarPassword()
+    empleado = session.get('empleado')
+    id = str(empleado['_id'])
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            empleado.pop('_id')
+            empleado['usuario']['usuario'] = form.usuario.data
+            mongo.db.empleados.update_one({'_id': ObjectId(id)}, {'$set': empleado})
+            empleado['_id'] = id
+            flash('Usuario modificado exitosamente', 'success')
+            return redirect(url_for('modificar_mis_datos'))
     return render_template('verDatos.html', titulo='Mis datos', empleado=empleado, form=form)

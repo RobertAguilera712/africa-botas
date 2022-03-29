@@ -24,6 +24,13 @@ class ModificarUsuario(FlaskForm):
                 raise ValidationError('El nombre de usuario ya existe. Ingrese otro diferente')
 
 
+class ModificarPassword(FlaskForm):
+    password_actual = PasswordField(label='Contraseña Actual', validators=[DataRequired('Por favor introduzca la contraseña. Actual')])
+    password_nuevo = PasswordField(label='Nueva contraseña', validators=[DataRequired('Por favor introduzca la contraseña. Nueva')])
+    confirmar_password_nuevo = PasswordField(label='Confirmar nueva contraseña', validators=[DataRequired('Por favor confirme la contraseña. Nueva'), EqualTo('password_nuevo', message='Las contraseñas no coinciden')])
+    submit = SubmitField(label='Guardar')
+
+
 class DetalleEmpleadoForm(FlaskForm):
     nombre = StringField(label='Nombre', validators=[DataRequired('Por favor introduzca el nombre')])
     apellido_p = StringField(label='Apellido paterno', validators=[DataRequired('Por favor introduzca el primer apellido')])
