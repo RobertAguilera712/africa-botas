@@ -51,6 +51,7 @@
         <div class="col-12 d-flex justify-content-center">
             <button type="button" class="btn btn-warning m-2" id="btnModificar">Modificar</button>
             {{ form.submit(class="btn btn-info m-2 d-none", id="btnGuardar") }}
+            <a href="/cambiar-password" class="btn btn-warning m-2 d-none" id="btnModificarPassword">Moficar contraseña</a>
           <a class="btn btn-danger m-2" href="{{ url_for('home') }}">Regresar<a/>
         </div>
     </form>
@@ -70,6 +71,7 @@
           element.disabled = false
       });
       document.getElementById('btnGuardar').classList.remove('d-none')
+      document.getElementById('btnModificarPassword').classList.remove('d-none')
      });
  </script>
 {% endblock scripts %}

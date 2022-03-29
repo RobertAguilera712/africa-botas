@@ -56,6 +56,7 @@ def login():
             empleado = mongo.db.empleados.find_one({'usuario.usuario': form.usuario.data});
             if empleado:
                 empleado['_id'] = str(empleado['_id'])
+                print(empleado)
                 # usuario = empleado.get('usuario')
                 if bcrypt.check_password_hash(empleado['usuario']['password'] , form.password.data):
                     session['empleado'] = empleado
@@ -230,9 +231,19 @@ def modificar_password():
     if request.method == 'POST':
         if form.validate_on_submit():
             empleado.pop('_id')
-            empleado['usuario']['usuario'] = form.usuario.data
+            hashed_password = bcrypt.generate_password_hash(form.password_nuevo.data).decode('utf-8')
+            print(form.password_nuevo.data)
+            print(hashed_password)
+            empleado['usuario']['password'] = hashed_password
             mongo.db.empleados.update_one({'_id': ObjectId(id)}, {'$set': empleado})
             empleado['_id'] = id
-            flash('Usuario modificado exitosamente', 'success')
+            flash('Contraseña modificada exitosamente', 'success')
             return redirect(url_for('modificar_mis_datos'))
-    return render_template('verDatos.html', titulo='Mis datos', empleado=empleado, form=form)
+    return render_template('modificarPassword.html', titulo='Cambiar contraseña', form=form)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    session['empleado'] = None
+    return redirect(url_for('login'))

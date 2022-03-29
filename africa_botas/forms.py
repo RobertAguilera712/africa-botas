@@ -1,7 +1,7 @@
 from email import message
 from flask import session
 from flask_wtf import FlaskForm
-from africa_botas import mongo
+from africa_botas import mongo, bcrypt
 from wtforms import * 
 from wtforms.validators import DataRequired, Length, ValidationError, EqualTo, NumberRange
 
@@ -29,6 +29,11 @@ class ModificarPassword(FlaskForm):
     password_nuevo = PasswordField(label='Nueva contraseña', validators=[DataRequired('Por favor introduzca la contraseña. Nueva')])
     confirmar_password_nuevo = PasswordField(label='Confirmar nueva contraseña', validators=[DataRequired('Por favor confirme la contraseña. Nueva'), EqualTo('password_nuevo', message='Las contraseñas no coinciden')])
     submit = SubmitField(label='Guardar')
+
+    def validate_password_actual(self, password_actual):
+        empleado = session.get('empleado')
+        if not bcrypt.check_password_hash(empleado['usuario']['password'] , password_actual.data):
+            raise ValidationError('La contraseña actual es incorrecta. Vuelve a intentarlo')
 
 
 class DetalleEmpleadoForm(FlaskForm):
