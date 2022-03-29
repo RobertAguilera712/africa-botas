@@ -1,3 +1,4 @@
+from cgi import print_directory
 from crypt import methods
 from flask import render_template, session, url_for, flash, redirect, request, jsonify
 from africa_botas import app, mongo, bcrypt
@@ -211,7 +212,11 @@ def modificar_mis_datos():
     if request.method == 'POST':
         if form.validate_on_submit():
             empleado['usuario']['usuario'] = form.usuario.data
+            print(f'id: {id}')
+            print(f'usuario: {form.usuario.data}')
+            print(f'empleado: {empleado}')
             mongo.db.empleados.update_one({'_id': ObjectId(id)}, {'$set': empleado})
             flash('Usuario modificado exitosamente', 'success')
             return redirect(url_for('modificar_mis_datos'))
+    form.usuario.data = empleado['usuario']['usuario']
     return render_template('verDatos.html', titulo='Mis datos', empleado=empleado, form=form)

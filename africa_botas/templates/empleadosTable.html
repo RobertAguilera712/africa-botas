@@ -55,6 +55,7 @@
                     <th>Teléfono</th>
                     <th>Puesto</th>
                     <th>Fecha de contratación</th>
+                    <th>Usuario</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -68,6 +69,7 @@
                     <td>{{ empleado['persona']['telefono'] }}</td>
                     <td>{{ empleado.puesto }}</td>
                     <td>{{ empleado.fecha_contratacion.date() }}</td>
+                    <td>{{ empleado['usuario']['usuario'] }}</td>
                     <td>
                         <a href="{{ url_for('modificar_empleado', id=empleado._id) }}" class="btn btn-primary btn-sm" role="button m-2">Detalle</a>
                         <form action="{{ url_for('borrar_empleado') }}" method="post" class="d-inline">

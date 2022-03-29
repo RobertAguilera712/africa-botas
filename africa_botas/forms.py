@@ -1,4 +1,5 @@
 from email import message
+from flask import session
 from flask_wtf import FlaskForm
 from africa_botas import mongo
 from wtforms import * 
@@ -13,12 +14,14 @@ class LoginForm(FlaskForm):
 
 class ModificarUsuario(FlaskForm):
     usuario = StringField(label='Usuario', validators=[DataRequired('Por favor introduzca el usuario')])
-    submit = SubmitField(label='Iniciar Sesión')
+    submit = SubmitField(label='Guardar')
 
     def validate_usuario(self, usuario):
-        user = mongo.db.empleados.find_one({'usuario.usuario': usuario.data});
-        if user:
-            raise ValidationError('El nombre de usuario ya existe. Ingrese otro diferente')
+        empleado = session.get('empleado')
+        if usuario.data != empleado['usuario']['usuario']:
+            user = mongo.db.empleados.find_one({'usuario.usuario': usuario.data});
+            if user:
+                raise ValidationError('El nombre de usuario ya existe. Ingrese otro diferente')
 
 
 class DetalleEmpleadoForm(FlaskForm):

@@ -31,9 +31,32 @@
             <h3>Fecha de contratación: <span>{{empleado['fecha_contratacion'].date()}}</span></h3>
         </div>
     </div>
+    <form action="" method="post" class="row">
+        {{ form.hidden_tag() }}
+        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+            <div class="form-floating">
+              {% if form.usuario.errors %}
+              {{ form.usuario(class="form-control is-invalid", placeholder=form.usuario.label.text) }}
+              <div class="invalid-feedback">
+                {% for error in form.usuario.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+              {% else %}
+              {{ form.usuario(class="form-control", placeholder=form.usuario.label.text) }}
+              {% endif %}
+              {{ form.usuario.label }}
+            </div>
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+            <button type="button" class="btn btn-warning m-2" id="btnModificar">Modificar</button>
+            {{ form.submit(class="btn btn-info m-2 d-none", id="btnGuardar") }}
+          <a class="btn btn-danger m-2" href="{{ url_for('home') }}">Regresar<a/>
+        </div>
+    </form>
 </div>
-{% endblock modulo %}
 
+{% endblock modulo %}
 {% block scripts %}
  {{ super() }}
  <script>
@@ -41,9 +64,6 @@
      inputs.forEach(element => {
         element.disabled = true
      });
-     document.querySelectorAll('input[type="password"], input[name="usuario"]').forEach(element => {
-       element.parentElement.remove()
-     })
      const btnModificar  = document.getElementById('btnModificar')
      btnModificar.addEventListener('click', () => {
       inputs.forEach(element => {
