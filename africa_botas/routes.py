@@ -247,3 +247,18 @@ def modificar_password():
 def logout():
     session['empleado'] = None
     return redirect(url_for('login'))
+
+
+@app.route('/login/movil', methods=['POST'])
+def login_movil():
+    usuario = request.form.get('usuario')
+    password = request.form.get('password')
+    empleado = mongo.db.empleados.find_one({'usuario.usuario': usuario})
+    if empleado:
+        empleado['_id'] = str(empleado['_id'])
+        if bcrypt.check_password_hash(empleado['usuario']['password'], password):
+            return jsonify({'code': 1, 'empleado': empleado})
+        else:
+            return jsonify({'code': 2, 'empleado': None})
+    else:
+        return jsonify({'code': 0, 'empleado': None})
