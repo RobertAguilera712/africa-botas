@@ -1,10 +1,9 @@
-from cgi import print_directory
-from crypt import methods
-from flask import render_template, session, url_for, flash, redirect, request, jsonify
+from flask import render_template, session, url_for, flash, redirect, request, jsonify, Response
 from africa_botas import app, mongo, bcrypt
 from africa_botas.forms import *
 from africa_botas.helpers import login_required, get_empleado
 from bson.objectid import ObjectId
+from bson import json_util
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -263,3 +262,10 @@ def login_movil():
             return jsonify({'code': 2, 'empleado': None})
     else:
         return jsonify({'code': 0, 'empleado': None})
+
+
+@app.route('/productos/getAll')
+def get_productos_movil():
+    productos = mongo.db.productos.find()
+    response = json_util.dumps(productos)
+    return Response(response, mimetype="application/json")
