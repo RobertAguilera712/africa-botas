@@ -256,6 +256,7 @@ def login_movil():
     empleado = mongo.db.empleados.find_one({'usuario.usuario': usuario})
     if empleado:
         empleado['_id'] = str(empleado['_id'])
+        print(password)
         if bcrypt.check_password_hash(empleado['usuario']['password'], password):
             return jsonify({'code': 1, 'empleado': empleado})
         else:
