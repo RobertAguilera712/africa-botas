@@ -135,6 +135,7 @@ def get_empleados():
 @login_required
 def registrar_producto():
     form = RegistrarProductosForm()
+    tallas = mongo.db.tallas.find()
     if request.method == 'POST':
         if form.validate_on_submit():
             producto = {
@@ -146,7 +147,7 @@ def registrar_producto():
             }
             mongo.db.productos.insert_one(producto)
             flash('Producto registrado exitosamente', 'success')
-    return render_template('productosForm.html', titulo='Registrar productos', form=form, operacion='Registrar')
+    return render_template('productosForm.html', titulo='Registrar productos', form=form, tallas=tallas, operacion='Registrar')
 
 
 @app.route('/producto', methods=['POST', 'GET'])
