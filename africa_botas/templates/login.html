@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css')}}">
 {% endblock head %}
 {% block contenido %}
-<div class="container justify-content-center align-items-center min-vh-100 overflow-scroll">
+<div class="container justify-content-center align-items-center min-vh-100 overflow-auto">
   <div class="row">
     <div class="col-12 my-4">
       {% with messages = get_flashed_messages(with_categories=true) %}
@@ -53,10 +53,6 @@
               {{ form.password(class="form-control", placeholder=form.password.label.text) }}
               {% endif %}
               {{ form.password.label }}
-            </div>
-            <div class="form-check mb-3">
-              {{ form.recuerdame(class="form-check-input") }}
-              {{ form.recuerdame.label(class="form-check-label") }}
             </div>
             <div class="mb-3 d-grid gap-2">
               {{ form.submit(class="btn btn-primary-dark d-block") }}

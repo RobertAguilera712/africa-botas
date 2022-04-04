@@ -4,7 +4,7 @@
 
 <div class="container my-4">
     <form class="row g-3 justify-content-center" action="" method="post">
-        <div class="col-3">
+        <div class="col-md-3">
             <div class="form-floating">
                 {{ form.hidden_tag() }}
                 {% if form.filtro.errors %}
@@ -20,7 +20,7 @@
                 {{ form.filtro.label }}
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-md-3">
             <div class="form-floating">
                 {% if form.busqueda.errors %}
                     {{ form.busqueda(class="form-control is-invalid", placeholder=form.busqueda.label.text) }}
@@ -62,18 +62,18 @@
             <tbody>
                 {% for producto in productos %}
                 <tr>
-                    <td>{{ producto['nombre']}}</td>
-                    <td>{{ producto['precio']}}</td>
-                    <td>{{ producto['marca']}}</td>
-                    <td>{{ producto['modelo']}}</td>
-                    <td>{{ producto['descripcion']}}</td>
-                    <td>
+                    <td data-label="Nombre">{{ producto['nombre']}}</td>
+                    <td data-label="Precio">{{ producto['precio']}}</td>
+                    <td data-label="Marca">{{ producto['marca']}}</td>
+                    <td data-label="Modelo">{{ producto['modelo']}}</td>
+                    <td data-label="Descripción">{{ producto['descripcion']}}</td>
+                    <td data-label="Foto">
                         <img src="{{ url_for('static', filename='img-productos/' ~ producto.nombreFoto) }}" width="100px">
                     </td>
-                    <td>
+                    <td data-label="QR">
                         <img src="{{ qrcode(producto._id) }}" width="100px">
                     </td>
-                    <td>
+                    <td data-label="Acciones">
                         <a href="{{ url_for('modificar_producto', id=producto._id) }}" class="btn btn-primary btn-sm" role="button m-2">Detalle</a>
                         <form action="{{ url_for('borrar_producto') }}" method="post" class="d-inline">
                             <input type="hidden" name="id" value="{{ producto._id }}">
