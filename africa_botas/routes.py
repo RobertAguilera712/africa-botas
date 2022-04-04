@@ -1,50 +1,16 @@
 from flask import render_template, session, url_for, flash, redirect, request, jsonify, Response
 from africa_botas import app, mongo, bcrypt
 from africa_botas.forms import *
-from africa_botas.helpers import login_required, get_empleado
+from africa_botas.helpers import login_required, get_empleado, guardar_foto
 from bson.objectid import ObjectId
 from bson import json_util
+import json
 
 
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    # form = PetForm()
-    # pets = mongo.db.pets.find()
-    # action = url_for('home')
-    # if request.method == 'POST':
-    #     if form.validate_on_submit():
-    #         name = request.form.get('name')
-    #         species = request.form.get('species')
-    #         breed = request.form.get('breed')
-    #         pet = {"name": name, "species": species, "breed": breed}
-    #         mongo.db.pets.insert_one(pet)
-    #         flash('The pet has been saved', 'success')
-    #         return redirect(url_for('home'))
-    # return render_template('index.html', form=form, pets=pets, action=action)
     return render_template('dashboard.html', titulo='dashboard', empleado = session.get('empleado'))
-
-@app.route('/modify/<string:id>', methods=['GET', 'POST'])
-def modify(id):
-    pass
-    # form = PetForm()
-    # pet = mongo.db.pets.find_one({"_id": ObjectId(id)})
-    # pets = mongo.db.pets.find()
-    # action = url_for('modify', id=id)
-    # if request.method == 'POST':
-    #     if form.validate_on_submit():
-    #         name = request.form.get('name')
-    #         species = request.form.get('species')
-    #         breed = request.form.get('breed')
-    #         pet = {"name": name, "species": species, "breed": breed}
-    #         mongo.db.pets.update_one({"_id": ObjectId(id)}, {"$set": pet})
-    #         flash('The pet has been modified', 'warning')
-    #         return redirect(url_for('home'))
-    # form.name.data = pet['name']
-    # form.species.data = pet['species']
-    # form.breed.data = pet['breed']
-    # return render_template('index.html', form=form, pets=pets, action=action)
-       
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -137,16 +103,24 @@ def registrar_producto():
     form = RegistrarProductosForm()
     tallas = mongo.db.tallas.find()
     if request.method == 'POST':
+        stock = json.loads(request.form.get('stock'))
         if form.validate_on_submit():
-            producto = {
-                'nombre': form.nombre.data,
-                'precio': float(form.precio.data),
-                'marca': form.marca.data,
-                'modelo': form.modelo.data,
-                'descripcion': form.descripcion.data
-            }
-            mongo.db.productos.insert_one(producto)
-            flash('Producto registrado exitosamente', 'success')
+            if stock:
+                nombre_imagen = guardar_foto(form.foto.data)
+                producto = {
+                    'nombre': form.nombre.data,
+                    'precio': float(form.precio.data),
+                    'marca': form.marca.data,
+                    'modelo': form.modelo.data,
+                    'descripcion': form.descripcion.data,
+                    'nombreFoto': nombre_imagen,
+                    'stock': stock
+                }
+                mongo.db.productos.insert_one(producto);
+                flash('Producto registrado exitosamente', 'success');
+                return redirect(url_for('registrar_producto'))
+            else:
+                flash('Agregue stock antes de guardar el producto', 'danger');
     return render_template('productosForm.html', titulo='Registrar productos', form=form, tallas=tallas, operacion='Registrar')
 
 
@@ -174,25 +148,39 @@ def get_productos():
 def modificar_producto(id):
     form = RegistrarProductosForm()
     if request.method == 'POST':
+        stock = json.loads(request.form.get('stock'))
         if form.validate_on_submit():
-            producto = {
-                'nombre': form.nombre.data,
-                'precio': float(form.precio.data),
-                'marca': form.marca.data,
-                'modelo': form.modelo.data,
-                'descripcion': form.descripcion.data
-            }
-            mongo.db.productos.update_one({'_id': ObjectId(id)},{'$set': producto})
-            flash('Producto modificado exitosamente', 'success')
-            return redirect(url_for('get_productos'))
+            if stock:
+                nombre_imagen = guardar_foto(form.foto.data)
+                producto = {
+                    'nombre': form.nombre.data,
+                    'precio': float(form.precio.data),
+                    'marca': form.marca.data,
+                    'modelo': form.modelo.data,
+                    'descripcion': form.descripcion.data,
+                    'nombreFoto': nombre_imagen,
+                    'stock': stock
+                }
+                mongo.db.productos.update_one({'_id': ObjectId(id)},{'$set': producto})
+                flash('Producto modificado exitosamente', 'success')
+                return redirect(url_for('get_productos'))
+            else:
+                flash('Agregue stock antes de guardar el producto', 'danger');
     producto=mongo.db.productos.find_one({'_id': ObjectId(id)})
+    stock_talla = producto["stock"]
+    quitar_talla = []
+    for talla in stock_talla:
+        quitar_talla.append({'_id': {'$ne': ObjectId(talla['talla']['_id'])}})
+    tallas = mongo.db.tallas.find({'$and': quitar_talla})
     if producto:
         form.nombre.data = producto["nombre"]
         form.precio.data = producto["precio"]
         form.marca.data = producto["marca"]
         form.modelo.data = producto["modelo"]
         form.descripcion.data = producto["descripcion"]
-    return render_template('productosForm.html', titulo='Detalle productos', form=form, operacion='Detalle')
+        nombreFoto = producto['nombreFoto']
+        ruta_foto = url_for('static', filename=f'img-productos/{nombreFoto}')
+    return render_template('productosForm.html', titulo='Detalle productos', form=form, operacion='Detalle', tallas=tallas, stock_talla=stock_talla, ruta_foto=ruta_foto)
 
 
 @app.route('/producto/borrar', methods=['POST'])
@@ -269,4 +257,14 @@ def login_movil():
 def get_productos_movil():
     productos = mongo.db.productos.find()
     response = json_util.dumps(productos)
+    return Response(response, mimetype="application/json")
+
+@app.route('/productos/get/<string:id>')
+def get_producto_movil(id):
+    try:
+        obj_id = ObjectId(id)
+    except:
+        obj_id = ObjectId('000000000000000000000000')
+    producto =mongo.db.productos.find_one({'_id': obj_id})
+    response = json_util.dumps(producto)
     return Response(response, mimetype="application/json")

@@ -1,7 +1,7 @@
 {% extends 'plantillaDashboard.html' %}
 {% block modulo %}
 <div class="container-fluid">
-    <h1 class="text-center my-3">Detalle empleado</h1>
+    <h1 class="text-center my-3">{{ titulo }}</h1>
     <form class="row" method="post" action="">
       {% block form %}
         {{ form.hidden_tag() }}

@@ -1,7 +1,8 @@
 from flask import redirect, session
 from datetime import datetime
 from functools import wraps
-from africa_botas import bcrypt
+from africa_botas import bcrypt, app
+import secrets, os
 
 
 def login_required(f):
@@ -31,3 +32,13 @@ def get_empleado(form):
         'persona': persona
     }
     return empleado
+
+
+def guardar_foto(foto):
+    random_hex = secrets.token_hex(8)
+    _, extension = os.path.splitext(foto.filename)
+    nombre_imagen = random_hex + extension
+    ruta_imagen = os.path.join(app.root_path, 'static/img-productos', nombre_imagen)
+    foto.save(ruta_imagen)
+    return nombre_imagen
+

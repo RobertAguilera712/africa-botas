@@ -54,7 +54,8 @@
                     <th>Marca</th>
                     <th>Modelo</th>
                     <th>Descripción</th>
-                    <th>Código QR</th>
+                    <th>Foto</th>
+                    <th>QR</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -66,6 +67,9 @@
                     <td>{{ producto['marca']}}</td>
                     <td>{{ producto['modelo']}}</td>
                     <td>{{ producto['descripcion']}}</td>
+                    <td>
+                        <img src="{{ url_for('static', filename='img-productos/' ~ producto.nombreFoto) }}" width="100px">
+                    </td>
                     <td>
                         <img src="{{ qrcode(producto._id) }}" width="100px">
                     </td>

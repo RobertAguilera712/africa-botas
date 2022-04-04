@@ -42,6 +42,7 @@
   </nav>
 </div>
 <div class="w-100 bg-light pt-2 overflow-auto">
+  <div id="alertas">
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
   {% for category, message in messages %}
@@ -52,6 +53,7 @@
   {% endfor %}
   {% endif %}
   {% endwith %}
+  </div>
 
   {% block modulo %}
   {% endblock modulo %}

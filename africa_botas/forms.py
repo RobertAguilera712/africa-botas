@@ -1,6 +1,7 @@
 from email import message
 from flask import session
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from africa_botas import mongo, bcrypt
 from wtforms import * 
 from wtforms.validators import DataRequired, Length, ValidationError, EqualTo, NumberRange
@@ -80,8 +81,8 @@ class RegistrarProductosForm(FlaskForm):
     modelo = StringField(label='Modelo', validators=[DataRequired('Por favor introduzca el modelo')])
     marca = StringField(label='Marca', validators=[DataRequired('Por favor introduzca el marca')])
     descripcion = TextAreaField('Descripción', validators=[DataRequired('Por favor introduzca la descripción')])
-    imagen = FileField('Foto')
-    submit = SubmitField(label='Guardar')
+    foto = FileField('Foto', validators=[DataRequired('Por favor seleccione una foto'), FileAllowed(['jpg', 'png', 'webp'], message='Por favor selecciona una imagen')])
+    btn_submit = SubmitField(label='Guardar')
 
 class BuscarProductoForm(FlaskForm):
     filtro = SelectField(label='Buscar por:', 

@@ -2,7 +2,7 @@
 {% block modulo %}
 <div class="container-fluid">
   <h1 class="text-center my-3">{{ operacion }} producto</h1>
-  <form class="row" method="post" action="">
+  <form class="row" method="post" action="" id="formAgregar" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     <div class="col-lg-4 col-md-6 col-sm-12 my-3">
       <div class="form-floating">
@@ -64,7 +64,7 @@
         {{ form.marca.label }}
       </div>
     </div>
-    <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+    <div class="col-lg-8 my-3">
       <div class="form-floating">
         {% if form.descripcion.errors %}
         {{ form.descripcion(class="form-control is-invalid", placeholder=form.descripcion.label.text) }}
@@ -79,15 +79,17 @@
         {{ form.descripcion.label }}
       </div>
     </div>
-    <div class="col-12 d-flex justify-content-center">
-      {% if operacion == "Detalle" %}
-      <button type="button" class="btn btn-warning m-2" id="btnModificar">Modificar</button>
-      {{ form.submit(class="btn btn-info m-2 d-none", id="btnGuardar") }}
-      {% else %}
-      {{ form.submit(class="btn btn-info m-2 ") }}
+    <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+      <button type="button" class="btn btn-secondary me-2" id="btnUploadImg">Cargar foto</button>
+       <img src="{{ ruta_foto }}" alt="No ha seleccionado ninguna imagen" id="selectedImg" height="50">
+      {{ form.foto(class="d-none", accept=".png, .jpg, .webp")}}
+      {% if form.foto.errors %}
+        {% for error in form.foto.errors %}
+          <span class="text-danger">{{ error }}</span><br>
+        {% endfor %}
       {% endif %}
-      <a class="btn btn-danger m-2" href="/producto">Regresar</a>
     </div>
+    <input type="hidden" name="stock" value="{{ stock_talla|string }}">
   </form>
   <div class="row">
     <div class="col-md-6">
@@ -101,22 +103,22 @@
               <th>Acciones</th>
             </tr>
           </thead>
-          <tbody id="tablaAgregarStock">
+          <tbody id="tbodyAgregarStock">
             {% for talla in tallas %}
-            <div id="{{ talla._id}}">
+            <tr id="{{ talla._id }}">
+              <td>{{ talla.talla }}</td>
               <form onsubmit="agregarStock(event)">
-                <tr>
-                  <td>{{ talla.talla }}</td>
-                  <td><input type="number" name="existencias" class="form-control" required min="1"></td>
-                  <td>
-                    <input type="submit" class="btn btn-primary" value="Añadir">
-                    <button type="button" class="btn btn-warning d-none">Modificar</button>
-                  </td>
-                  <input type="hidden" value="{{ talla._id }}" name="idTalla">
-                  <input type="hidden" value="{{ talla.talla }}" name="talla">
-                </tr>
+                <td><input type="number" name="existencias" class="form-control" required min="1"></td>
+                <td>
+                  <input type="submit" class="btn btn-primary btn-sm" value="Añadir">
+                  <button type="button" class="btn btn-warning btn-sm d-none"
+                    onclick="modificar(event)">Modificar</button>
+                  <button type="button" class="btn btn-danger btn-sm d-none" onclick="eliminar(event)">Eliminar</button>
+                </td>
+                <input type="hidden" value="{{ talla._id }}" name="idTalla">
+                <input type="hidden" value="{{ talla.talla }}" name="talla">
               </form>
-            </div>
+            </tr>
             {% endfor %}
           </tbody>
         </table>
@@ -134,9 +136,34 @@
             </tr>
           </thead>
           <tbody id="tbodyStockAgregado">
+            {% for talla in stock_talla %}
+            <tr id="{{ talla.talla._id }}">
+              <td>{{ talla.talla.talla }}</td>
+              <form onsubmit="agregarStock(event)">
+                <td><input type="number" name="existencias" class="form-control" required min="1"
+                    value="{{ talla.existencias }}"></td>
+                <td>
+                  <input type="submit" class="btn btn-primary btn-sm d-none" value="Guardar">
+                  <button type="button" class="btn btn-warning btn-sm" onclick="modificar(event)">Modificar</button>
+                  <button type="button" class="btn btn-danger btn-sm" onclick="eliminar(event)">Eliminar</button>
+                </td>
+                <input type="hidden" value="{{ talla.talla._id }}" name="idTalla">
+                <input type="hidden" value="{{ talla.talla.talla }}" name="talla">
+              </form>
+            </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
+    </div>
+    <div class="col-12 d-flex justify-content-center">
+      {% if operacion == "Detalle" %}
+      <button type="button" class="btn btn-warning m-2" id="btnModificar">Modificar</button>
+      {{ form.btn_submit(class="btn btn-info m-2 d-none", id="btnGuardar", form='formAgregar') }}
+      {% else %}
+      {{ form.btn_submit(class="btn btn-info m-2", form='formAgregar') }}
+      {% endif %}
+      <a class="btn btn-danger m-2" href="/producto">Regresar</a>
     </div>
   </div>
 </div>
@@ -145,30 +172,131 @@
 {% block scripts %}
 {{ super() }}
 <script>
-  stock = []
-  tbodyStockAgregado = document.getElementById('tbodyStockAgregado');
+
+  function getBase64(file) {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onload = () => resolve(reader.result);
+		reader.onerror = error => reject(error);
+	});
+  }
+
+  const btnUploadImage = document.getElementById("btnUploadImg");
+  const imgInput = document.getElementById("foto");
+  const selectedImg = document.getElementById("selectedImg");
+
+  btnUploadImage.addEventListener("click", () => {
+      imgInput.click();
+  });
+
+  imgInput.addEventListener("change", () => {
+      getBase64(imgInput.files[0]).then(src => {
+          selectedImg.src = src;
+      });
+  });
+
+  let stock = []
+  const tbodyStockAgregado = document.getElementById('tbodyStockAgregado');
+  const tbodyAgregarStock = document.getElementById('tbodyAgregarStock');
+
   function agregarStock(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
-    stock.push({ 'talla': formData.get('talla'), 'existencias': formData.get('existencias') });
-    stockForm = document.getElementById(formData.get('idTalla'));
-    stockForm.remove();
-    // tbodyStockAgregado.append(stockForm);
+    const stockElement = {
+      'talla': {
+        '_id': formData.get('idTalla'),
+        'talla': formData.get('talla')
+      }, 'existencias': formData.get('existencias')
+    };
+    const index = stock.findIndex(element => element.talla._id === stockElement.talla._id);
+    if (index > -1) {
+      stock.splice(index, 1);
+    }
+    stock.push(stockElement);
+    const id = formData.get('idTalla');
+    console.log(formData);
+    const tr = document.getElementById(formData.get('idTalla'));
+    tr.remove();
+    tbodyStockAgregado.append(tr);
+    tr.querySelector('.btn.btn-warning').classList.remove('d-none');
+    tr.querySelector('.btn.btn-danger').classList.remove('d-none');
+    tr.querySelector('input[name="existencias"]').disabled = true;
+    const btnAgregar = tr.querySelector('.btn.btn-primary');
+    btnAgregar.classList.add('d-none');
+    btnAgregar.value = 'Guardar';
   }
+
+  function modificar(e) {
+    const btnModificar = e.target;
+    const tr = btnModificar.parentElement.parentElement;
+    tr.querySelector('.btn.btn-warning').classList.add('d-none');
+    tr.querySelector('input[name="existencias"]').disabled = false;
+    const btnAgregar = tr.querySelector('.btn.btn-primary');
+    btnAgregar.classList.remove('d-none');
+  }
+
+  function eliminar(e) {
+    const tr = e.target.parentElement.parentElement;
+    tr.remove();
+    tbodyAgregarStock.append(tr);
+    tr.querySelector('.btn.btn-warning').classList.add('d-none');
+    tr.querySelector('.btn.btn-danger').classList.add('d-none');
+    const idTalla = tr.querySelector('input[name="idTalla"]').value;
+    const index = stock.findIndex(element => element.talla._id === idTalla);
+    stock.splice(index, 1);
+    const inputExistencias = tr.querySelector('input[name="existencias"]');
+    inputExistencias.disabled = false;
+    inputExistencias.value = "";
+    const btnAgregar = tr.querySelector('.btn.btn-primary');
+    btnAgregar.classList.remove('d-none');
+    btnAgregar.value = 'Añadir';
+  }
+
+  document.getElementById('formAgregar').addEventListener('submit', async e => {
+    e.preventDefault();
+    const form = e.target;
+    form['stock'].value = JSON.stringify(stock);
+    form.submit();
+  })
+
 </script>
 {% if operacion == "Detalle" %}
 <script>
-  const inputs = document.querySelectorAll('input:not([type="submit"]), select, textarea')
+  const stockString = document.querySelector('input[name="stock"').value.replaceAll("'", '"');
+  console.log(stockString);
+  stock = JSON.parse(stockString)
+  const inputs = document.querySelectorAll('input:not([type="submit"]):not([type="hidden"]), select, textarea')
+  const btnsAgregar = document.getElementById('tbodyAgregarStock').querySelectorAll('input[type="submit"]');
+  const btnsModificarEliminar = document.getElementById('tbodyStockAgregado').querySelectorAll('button');
   inputs.forEach(element => {
     element.disabled = true
   });
+  btnsAgregar.forEach(element => {
+    element.classList.add('d-none');
+  })
+  btnsModificarEliminar.forEach(element => {
+    element.classList.add('d-none');
+  })
   const btnModificar = document.getElementById('btnModificar')
   btnModificar.addEventListener('click', () => {
     inputs.forEach(element => {
       element.disabled = false
     });
+    btnsAgregar.forEach(element => {
+      element.classList.remove('d-none');
+    })
+    btnsModificarEliminar.forEach(element => {
+      element.classList.remove('d-none');
+    })
     document.getElementById('btnGuardar').classList.remove('d-none')
+    document.getElementById('tbodyStockAgregado')
+    .querySelectorAll('input:not([type="submit"]):not([type="hidden"]), select, textarea')
+    .forEach(element => {
+      element.disabled = true
+    })
   });
 </script>
 {% endif %}
+
 {% endblock scripts %}

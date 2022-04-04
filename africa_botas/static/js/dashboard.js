@@ -37,3 +37,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
 	// Your code to run since DOM is loaded and ready
 });
 
+function crearAlerta(mensaje, categoria){
+	const div = document.createElement('div');
+	div.className = `alert alert-${categoria} alert-dismissible fade show`;
+	div.innerHTML = `${mensaje}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>`;
+	return div;
+}
