@@ -83,6 +83,15 @@ class RegistrarProductosForm(FlaskForm):
     foto = FileField('Foto', validators=[DataRequired('Por favor seleccione una foto'), FileAllowed(['jpg', 'png', 'webp'], message='Por favor selecciona una imagen')])
     btn_submit = SubmitField(label='Guardar')
 
+class ModificarProducto(FlaskForm):
+    nombre = StringField(label='Nombre', validators=[DataRequired('Por favor introduzca el nombre')])
+    precio = DecimalField(label='Precio', validators=[DataRequired('Por favor introduzca el precio'), NumberRange(min=1, message='Introduzca un precio valido')])
+    modelo = StringField(label='Modelo', validators=[DataRequired('Por favor introduzca el modelo')])
+    marca = StringField(label='Marca', validators=[DataRequired('Por favor introduzca el marca')])
+    descripcion = TextAreaField('Descripción', validators=[DataRequired('Por favor introduzca la descripción')])
+    foto = FileField('Foto', validators=[FileAllowed(['jpg', 'png', 'webp'], message='Por favor selecciona una imagen')])
+    btn_submit = SubmitField(label='Guardar')
+
 class BuscarProductoForm(FlaskForm):
     filtro = SelectField(label='Buscar por:', 
                         choices=[

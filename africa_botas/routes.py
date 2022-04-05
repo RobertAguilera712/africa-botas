@@ -146,21 +146,22 @@ def get_productos():
 @app.route('/producto/detalle/<string:id>', methods=['POST', 'GET'])
 @login_required
 def modificar_producto(id):
-    form = RegistrarProductosForm()
+    form = ModificarProducto()
     if request.method == 'POST':
         stock = json.loads(request.form.get('stock'))
         if form.validate_on_submit():
             if stock:
-                nombre_imagen = guardar_foto(form.foto.data)
                 producto = {
                     'nombre': form.nombre.data,
                     'precio': float(form.precio.data),
                     'marca': form.marca.data,
                     'modelo': form.modelo.data,
                     'descripcion': form.descripcion.data,
-                    'nombreFoto': nombre_imagen,
                     'stock': stock
                 }
+                if form.foto.data:
+                    nombre_imagen = guardar_foto(form.foto.data)
+                    producto['nombreFoto'] = nombre_imagen
                 mongo.db.productos.update_one({'_id': ObjectId(id)},{'$set': producto})
                 flash('Producto modificado exitosamente', 'success')
                 return redirect(url_for('get_productos'))
