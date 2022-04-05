@@ -159,7 +159,7 @@
     <div class="col-12 d-flex justify-content-center">
       {% if operacion == "Detalle" %}
       <button type="button" class="btn btn-warning m-2" id="btnModificar">Modificar</button>
-      {{ form.btn_submit(class="btn btn-info m-2", form='formAgregar') }}
+      {{ form.btn_submit(class="btn btn-info m-2 d-none", form='formAgregar') }}
       {% else %}
       {{ form.btn_submit(class="btn btn-info m-2", form='formAgregar') }}
       {% endif %}
